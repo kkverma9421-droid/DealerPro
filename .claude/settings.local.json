@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const pkg = require\\('./node_modules/next/package.json'\\); console.log\\(pkg.version\\)\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Administrator\\dealerpro\\app\\property"
+    ]
+  }
+}
