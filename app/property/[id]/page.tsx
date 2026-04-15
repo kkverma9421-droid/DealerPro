@@ -5,6 +5,7 @@ import { useParams }           from 'next/navigation'
 import Link                    from 'next/link'
 import { supabase }            from '@/lib/supabase/client'
 import type { Property, PropertyImage, PropertyStatus } from '@/types'
+import { getMockById, isMockId } from '@/data/mockProperties'
 
 // Extends the shared type with fields collected in the form but not yet in types/index.ts
 interface PropertyDetail extends Property {
@@ -184,7 +185,23 @@ export default function PropertyDetailPage() {
 
       if (propRes.error) {
         if (propRes.error.code === 'PGRST116') {
-          setNotFound(true)
+          // Not in Supabase — try mock data before showing 404
+          const mock = getMockById(id)
+          if (mock) {
+            setProperty(mock as PropertyDetail)
+            setImages(mock.property_images ?? [])
+          } else {
+            setNotFound(true)
+          }
+        } else if (isMockId(id)) {
+          // DB unreachable but ID is a mock id — still show mock data
+          const mock = getMockById(id)
+          if (mock) {
+            setProperty(mock as PropertyDetail)
+            setImages(mock.property_images ?? [])
+          } else {
+            setError(propRes.error.message)
+          }
         } else {
           setError(propRes.error.message)
         }

@@ -1,11 +1,15 @@
 'use client'
 
-import { useState, useRef, useCallback, type ChangeEvent } from 'react'
+import { useState, useEffect, useRef, useCallback, type ChangeEvent } from 'react'
 import { useRouter }          from 'next/navigation'
 import Link                   from 'next/link'
 import { insertProperty }     from '../add-property/actions'
 import { uploadPropertyImage, savePropertyImages } from '@/lib/supabase/storage'
 import { LocationPicker, type LocationValue } from '@/components/LocationPicker'
+import { supabase }           from '@/lib/supabase/client'
+import PropertyCard           from '@/components/PropertyCard'
+import { mockProperties }     from '@/data/mockProperties'
+import type { Property, PropertyStatus } from '@/types'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PROPERTY_TYPES = [
@@ -108,6 +112,81 @@ function ImagePreview({ files, onRemove }: { files: File[]; onRemove: (i: number
           </button>
         </div>
       ))}
+    </div>
+  )
+}
+
+// ─── Property Listings Section ────────────────────────────────────────────────
+function PropertyListings() {
+  const router = useRouter()
+  const [properties,  setProperties]  = useState<Property[]>([])
+  const [propLoading, setPropLoading] = useState(true)
+  const [isMock,      setIsMock]      = useState(false)
+
+  useEffect(() => {
+    async function fetchProperties() {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*, property_images(*)')
+        .order('created_at', { ascending: false })
+        .limit(12)
+
+      if (!error && data && data.length > 0) {
+        setProperties(data as Property[])
+        setIsMock(false)
+      } else {
+        // Supabase returned empty or errored — fall back to mock data
+        setProperties(mockProperties as Property[])
+        setIsMock(true)
+      }
+      setPropLoading(false)
+    }
+    fetchProperties()
+  }, [])
+
+  function handleStatusChange(id: string, status: PropertyStatus) {
+    if (isMock) return   // no-op for mock data
+    supabase
+      .from('properties')
+      .update({ status })
+      .eq('id', id)
+      .then(() => {
+        setProperties(prev =>
+          prev.map(p => p.id === id ? { ...p, status } : p)
+        )
+      })
+  }
+
+  if (propLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-64 bg-slate-100 rounded-2xl animate-pulse" />
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <div className="mb-8">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base font-bold text-slate-700">Recent Properties</h2>
+        {isMock && (
+          <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+            Sample data — no live listings yet
+          </span>
+        )}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {properties.map(p => (
+          <PropertyCard
+            key={p.id}
+            property={p}
+            onStatusChange={isMock ? undefined : handleStatusChange}
+            onClick={() => router.push(`/property/${p.id}`)}
+          />
+        ))}
+      </div>
     </div>
   )
 }
@@ -225,6 +304,9 @@ export default function AddPropertyPage() {
       <Navbar />
 
       <div className="max-w-2xl mx-auto px-4 py-10">
+        {/* ── Property listings with mock fallback ── */}
+        <PropertyListings />
+
         <div className="mb-6">
           <h1 className="text-2xl font-extrabold text-slate-800">Add New Property</h1>
           <p className="text-slate-500 text-sm mt-1">
