@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { insertProperty }          from './actions'
 import { uploadPropertyImage, savePropertyImages } from '@/lib/supabase/storage'
+import { LocationPicker, type LocationValue } from '@/components/LocationPicker'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PROPERTY_TYPES = [
@@ -13,7 +14,6 @@ const PROPERTY_TYPES = [
 ]
 const CATEGORIES  = ['residential', 'commercial', 'industrial']
 const STATUSES    = ['available', 'hold', 'requirement']
-const CITIES      = ['Ludhiana', 'Chandigarh', 'Mohali', 'Jalandhar', 'Amritsar', 'Delhi', 'Mumbai', 'Other']
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function Navbar() {
@@ -21,9 +21,14 @@ function Navbar() {
     <nav className="bg-white border-b border-slate-100 px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-sm">
       <div className="flex items-center gap-2">
         <span className="text-2xl">🏠</span>
-        <span className="text-lg font-extrabold text-slate-800">
-          Dealer<span className="text-emerald-500">Pro</span>
-        </span>
+        <div className="flex flex-col leading-tight">
+          <span className="text-lg font-extrabold text-slate-800">
+            Dealer<span className="text-emerald-500">Pro</span>
+          </span>
+          <span className="text-[10px] text-slate-400 font-medium tracking-wide">
+            by Shri Ram Krishna Group of Properties
+          </span>
+        </div>
       </div>
       <div className="flex items-center gap-3">
         <Link href="/dashboard" className="text-sm text-slate-500 hover:text-slate-700 font-medium transition">
@@ -128,10 +133,10 @@ export default function AddPropertyPage() {
   const [error,   setError]   = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
+  const [location, setLocation] = useState<LocationValue>({ city: 'Mathura', locality: '' })
+
   const [form, setForm] = useState({
     title:         '',
-    city:          'Ludhiana',
-    locality:      '',
     price:         '',
     property_type: 'apartment',
     category:      'residential',
@@ -167,9 +172,9 @@ export default function AddPropertyPage() {
 
   // ── Step 1 validation ──────────────────────────────────────────────────────
   function validateStep0(): string | null {
-    if (!form.title.trim())      return 'Property title is required'
-    if (!form.city.trim())       return 'City is required'
-    if (!form.locality.trim())   return 'Locality is required'
+    if (!form.title.trim())         return 'Property title is required'
+    if (!location.city.trim())      return 'City is required'
+    if (!location.locality.trim())  return 'Locality is required'
     if (!form.price || isNaN(Number(form.price)) || Number(form.price) <= 0)
       return 'A valid price is required'
     if (!form.owner_name.trim()) return 'Owner name is required'
@@ -192,8 +197,8 @@ export default function AddPropertyPage() {
 
     const result = await insertProperty({
       title:         form.title.trim(),
-      city:          form.city,
-      locality:      form.locality.trim(),
+      city:          location.city,
+      locality:      location.locality,
       price:         Number(form.price),
       property_type: form.property_type,
       category:      form.category,
@@ -264,17 +269,11 @@ export default function AddPropertyPage() {
                   value={form.title} onChange={set('title')} />
               </Field>
 
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="City" required>
-                  <select className={selectCls} value={form.city} onChange={set('city')}>
-                    {CITIES.map(c => <option key={c}>{c}</option>)}
-                  </select>
-                </Field>
-                <Field label="Locality / Area" required>
-                  <input className={inputCls} placeholder="e.g. Model Town"
-                    value={form.locality} onChange={set('locality')} />
-                </Field>
-              </div>
+              <LocationPicker
+                value={location}
+                onChange={setLocation}
+                required
+              />
 
               <Field label="Price (₹)" required hint="Enter full amount e.g. 5500000 for ₹55 L">
                 <div className="relative">
@@ -421,7 +420,7 @@ export default function AddPropertyPage() {
               <div className="bg-slate-50 rounded-xl p-5 space-y-3">
                 {[
                   { label: 'Title',        value: form.title          },
-                  { label: 'Location',     value: `${form.locality}, ${form.city}` },
+                  { label: 'Location',     value: `${location.locality}, ${location.city}` },
                   { label: 'Price',        value: formatPrice(form.price)           },
                   { label: 'Type',         value: form.property_type.replace('_', ' ') },
                   { label: 'Category',     value: form.category       },

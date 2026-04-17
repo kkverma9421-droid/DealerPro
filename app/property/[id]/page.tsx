@@ -51,9 +51,14 @@ function Navbar() {
     <nav className="bg-white border-b border-slate-100 px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-sm">
       <div className="flex items-center gap-2">
         <span className="text-2xl">🏠</span>
-        <span className="text-lg font-extrabold text-slate-800">
-          Dealer<span className="text-emerald-500">Pro</span>
-        </span>
+        <div className="flex flex-col leading-tight">
+          <span className="text-lg font-extrabold text-slate-800">
+            Dealer<span className="text-emerald-500">Pro</span>
+          </span>
+          <span className="text-[10px] text-slate-400 font-medium tracking-wide">
+            by Shri Ram Krishna Group of Properties
+          </span>
+        </div>
       </div>
       <Link
         href="/dashboard"

@@ -15,11 +15,16 @@ export default function HomePage() {
 
       <div className="relative z-10 text-center max-w-2xl">
         {/* Brand */}
-        <div className="flex items-center justify-center gap-3 mb-8">
-          <span className="text-5xl select-none">🏠</span>
-          <span className="text-4xl font-extrabold text-white tracking-tight">
-            Dealer<span className="text-emerald-400">Pro</span>
-          </span>
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex items-center gap-3">
+            <span className="text-5xl select-none">🏠</span>
+            <span className="text-4xl font-extrabold text-white tracking-tight">
+              Dealer<span className="text-emerald-400">Pro</span>
+            </span>
+          </div>
+          <p className="text-slate-400 text-sm font-medium mt-1 tracking-wide">
+            by Shri Ram Krishna Group of Properties
+          </p>
         </div>
 
         {/* Tagline */}

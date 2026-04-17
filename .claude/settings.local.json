@@ -3,7 +3,8 @@
     "allow": [
       "Bash(node -e \"const pkg = require\\('./node_modules/next/package.json'\\); console.log\\(pkg.version\\)\")",
       "Bash(vercel --version)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx next:*)"
     ],
     "additionalDirectories": [
       "c:\\Users\\Administrator\\dealerpro\\app\\property"

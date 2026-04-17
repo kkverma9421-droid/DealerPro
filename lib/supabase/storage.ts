@@ -31,10 +31,10 @@ export async function savePropertyImages(
   if (!urls.length) return
 
   const rows = urls.map((image_url, i) => ({
-    property_id: propertyId,
+    property_id:  propertyId,
     image_url,
-    image_order: i,
-    is_primary:  i === 0,
+    sort_order:   i,
+    is_primary:   i === 0,
     storage_path: image_url.split('/property-images/')[1] ?? '',
   }))
 

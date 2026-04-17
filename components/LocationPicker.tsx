@@ -4,10 +4,9 @@ import {
   useState,
   useRef,
   useEffect,
-  useCallback,
   type KeyboardEvent,
 } from 'react'
-import { searchCities, searchLocalities, BRIJ_CITIES } from '@/data/brijLocations'
+import { searchLocalities, BRIJ_CITIES } from '@/data/brijLocations'
 
 // ─── Generic searchable dropdown ──────────────────────────────────────────────
 interface DropdownProps {
@@ -159,7 +158,7 @@ function SearchableDropdown({
           >
             {filtered.length === 0 ? (
               <li className="px-4 py-3 text-sm text-slate-400 text-center">
-                No results for "{query}"
+                {`No results for "${query}"`}
               </li>
             ) : (
               filtered.map((option, i) => {
@@ -269,7 +268,7 @@ interface CityFilterProps {
 }
 
 export function CityFilter({ value, onChange }: CityFilterProps) {
-  const cityOptions = ['', ...BRIJ_CITIES.map(c => c.name)]
+  const cityOptions = BRIJ_CITIES.map(c => c.name)
 
   return (
     <div className="relative w-44">
@@ -278,7 +277,7 @@ export function CityFilter({ value, onChange }: CityFilterProps) {
         placeholder="All Cities"
         icon="🏙"
         value={value}
-        options={BRIJ_CITIES.map(c => c.name)}
+        options={cityOptions}
         onChange={v => onChange(v)}
       />
     </div>
