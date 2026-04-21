@@ -348,8 +348,8 @@ export default function PropertyDetailPage() {
                   <Chip icon="📍" label="City"     value={property.city} />
                   <Chip icon="🗺️" label="Locality" value={property.locality} />
 
-                  {property.area_sqft != null && (
-                    <Chip icon="📐" label="Area"      value={`${property.area_sqft.toLocaleString()} sq yd`} />
+                  {property.area != null && (
+                    <Chip icon="📐" label="Area"      value={`${property.area.toLocaleString()} sq yd`} />
                   )}
                   {property.bedrooms != null && (
                     <Chip icon="🛏️" label="Bedrooms"  value={`${property.bedrooms} BHK`} />

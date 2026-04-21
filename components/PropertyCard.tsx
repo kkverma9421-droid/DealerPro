@@ -99,9 +99,9 @@ export default function PropertyCard({ property, onStatusChange, onClick }: Prop
           <span className="text-[10px] text-slate-500 bg-slate-50 px-2 py-0.5 rounded capitalize">
             {property.property_type.replace('_', ' ')}
           </span>
-          {property.area_sqft && (
+          {property.area && (
             <span className="text-[10px] text-slate-500 bg-slate-50 px-2 py-0.5 rounded">
-              📐 {property.area_sqft.toLocaleString()} sqft
+              📐 {property.area.toLocaleString()} sqft
             </span>
           )}
           {property.bedrooms && (
@@ -143,7 +143,7 @@ export default function PropertyCard({ property, onStatusChange, onClick }: Prop
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">
             {property.owner_name.charAt(0).toUpperCase()}
           </div>
           <span className="text-[11px] text-slate-600 truncate">
@@ -152,7 +152,7 @@ export default function PropertyCard({ property, onStatusChange, onClick }: Prop
         </div>
 
         {property.owner_phone && (
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
             <a
               href={`tel:${property.owner_phone}`}
               className="text-slate-400 hover:text-emerald-600 transition text-sm"

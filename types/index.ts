@@ -17,7 +17,7 @@ export interface Property {
   locality:      string
   price:         number
   property_type: string
-  area_sqft?:    number
+  area?:         number
   bedrooms?:     number
   owner_name:    string
   owner_phone?:  string

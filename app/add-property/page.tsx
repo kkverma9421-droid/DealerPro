@@ -3,8 +3,7 @@
 import { useState, useRef, useCallback, type ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { insertProperty }          from './actions'
-import { uploadPropertyImage, savePropertyImages } from '@/lib/supabase/storage'
+import { insertProperty, uploadPropertyImagesAction } from './actions'
 import { LocationPicker, type LocationValue } from '@/components/LocationPicker'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -127,10 +126,12 @@ function StepBar({ current }: { current: number }) {
 export default function AddPropertyPage() {
   const router = useRouter()
 
-  const [step,    setStep]    = useState(0)
-  const [files,   setFiles]   = useState<File[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error,   setError]   = useState<string | null>(null)
+  const [step,          setStep]          = useState(0)
+  const [files,         setFiles]         = useState<File[]>([])
+  const [loading,       setLoading]       = useState(false)
+  const [loadingMsg,    setLoadingMsg]    = useState('Submitting…')
+  const [error,         setError]         = useState<string | null>(null)
+  const [uploadWarning, setUploadWarning] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const [location, setLocation] = useState<LocationValue>({ city: 'Mathura', locality: '' })
@@ -145,7 +146,7 @@ export default function AddPropertyPage() {
     status:        'available',
     featured:      false,
     description:   '',
-    area_sqft:     '',
+    area:          '',
     bedrooms:      '',
     bathrooms:     '',
     latitude:      '',
@@ -194,6 +195,8 @@ export default function AddPropertyPage() {
   async function handleSubmit() {
     setLoading(true)
     setError(null)
+    setUploadWarning(null)
+    setLoadingMsg('Saving property…')
 
     const result = await insertProperty({
       title:         form.title.trim(),
@@ -207,11 +210,11 @@ export default function AddPropertyPage() {
       status:        form.status,
       featured:      form.featured,
       description:   form.description.trim(),
-      area_sqft:     form.area_sqft     ? Number(form.area_sqft)  : null,
-      bedrooms:      form.bedrooms      ? Number(form.bedrooms)   : null,
-      bathrooms:     form.bathrooms     ? Number(form.bathrooms)  : null,
-      latitude:      form.latitude      ? Number(form.latitude)   : null,
-      longitude:     form.longitude     ? Number(form.longitude)  : null,
+      area:          form.area       ? Number(form.area)        : null,
+      bedrooms:      form.bedrooms   ? Number(form.bedrooms)   : null,
+      bathrooms:     form.bathrooms  ? Number(form.bathrooms)  : null,
+      latitude:      form.latitude   ? Number(form.latitude)   : null,
+      longitude:     form.longitude  ? Number(form.longitude)  : null,
     })
 
     if ('error' in result) {
@@ -221,12 +224,18 @@ export default function AddPropertyPage() {
     }
 
     if (files.length > 0) {
-      const urls: string[] = []
-      for (let i = 0; i < files.length; i++) {
-        const url = await uploadPropertyImage(files[i], result.id, i)
-        if (url) urls.push(url)
+      setLoadingMsg(`Uploading ${files.length} image${files.length > 1 ? 's' : ''}…`)
+      const fd = new FormData()
+      files.forEach((f, i) => fd.append(`file_${i}`, f))
+      const { failed, errors } = await uploadPropertyImagesAction(fd, result.id)
+      if (failed > 0) {
+        setUploadWarning(
+          `Property saved, but ${failed} image${failed > 1 ? 's' : ''} failed to upload. ` +
+          errors.join(' | ')
+        )
+        setLoading(false)
+        return          // stay on page so user sees the warning
       }
-      await savePropertyImages(result.id, urls)
     }
 
     setLoading(false)
@@ -365,7 +374,7 @@ export default function AddPropertyPage() {
               <div className="grid grid-cols-3 gap-4">
                 <Field label="Area (sq ft)">
                   <input type="number" className={inputCls} placeholder="1450"
-                    value={form.area_sqft} onChange={set('area_sqft')} min={0} />
+                    value={form.area} onChange={set('area')} min={0} />
                 </Field>
                 <Field label="Bedrooms">
                   <input type="number" className={inputCls} placeholder="3"
@@ -427,13 +436,13 @@ export default function AddPropertyPage() {
                   { label: 'Status',       value: form.status         },
                   { label: 'Owner',        value: form.owner_name     },
                   { label: 'Phone',        value: form.owner_phone || '—' },
-                  { label: 'Area',         value: form.area_sqft ? `${form.area_sqft} sqft` : '—' },
+                  { label: 'Area',         value: form.area ? `${form.area} sq yd` : '—' },
                   { label: 'Bedrooms',     value: form.bedrooms  || '—' },
                   { label: 'Featured',     value: form.featured ? '⭐ Yes' : 'No' },
                   { label: 'Images',       value: `${files.length} selected` },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex justify-between items-start gap-4">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wide w-24 flex-shrink-0">{label}</span>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wide w-24 shrink-0">{label}</span>
                     <span className="text-sm font-semibold text-slate-700 text-right capitalize">{value}</span>
                   </div>
                 ))}
@@ -456,8 +465,16 @@ export default function AddPropertyPage() {
           {/* ── Error ── */}
           {error && (
             <div className="mt-5 flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl p-3.5">
-              <span className="text-red-400 flex-shrink-0 mt-0.5">⚠️</span>
+              <span className="text-red-400 shrink-0 mt-0.5">⚠️</span>
               <p className="text-red-700 text-sm font-medium">{error}</p>
+            </div>
+          )}
+
+          {/* ── Upload warning (property saved but images failed) ── */}
+          {uploadWarning && (
+            <div className="mt-5 flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-xl p-3.5">
+              <span className="shrink-0 mt-0.5">⚠️</span>
+              <p className="text-amber-800 text-sm font-medium">{uploadWarning}</p>
             </div>
           )}
 
@@ -496,7 +513,7 @@ export default function AddPropertyPage() {
                 {loading && (
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 )}
-                {loading ? 'Submitting…' : '✅ Submit Property'}
+                {loading ? loadingMsg : '✅ Submit Property'}
               </button>
             )}
           </div>
