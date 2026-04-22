@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
-import AppNavbar      from '@/components/AppNavbar'
+import AppNavbar        from '@/components/AppNavbar'
+import MobileBottomNav  from '@/components/MobileBottomNav'
 import { supabase }   from '@/lib/supabase/client'
 import { mockProperties } from '@/data/mockProperties'
 import { mockLeads }      from '@/data/mockLeads'
@@ -303,7 +304,7 @@ export default function AnalyticsPage() {
         }
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-8">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -396,6 +397,8 @@ export default function AnalyticsPage() {
 
         <p className="text-center text-xs text-slate-400 mt-8 pb-4">DealerPro v1.0 · Analytics</p>
       </div>
+
+      <MobileBottomNav />
     </div>
   )
 }
