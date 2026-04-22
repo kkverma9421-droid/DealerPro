@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams }           from 'next/navigation'
 import Link                    from 'next/link'
+import Image                   from 'next/image'
 import { supabase }            from '@/lib/supabase/client'
 import type { Property, PropertyImage, PropertyStatus } from '@/types'
 import { getMockById, isMockId } from '@/data/mockProperties'
@@ -119,11 +120,14 @@ function Gallery({ images, emoji }: { images: PropertyImage[]; emoji: string }) 
   return (
     <div className="mb-6">
       {/* Primary / active image */}
-      <div className="w-full h-64 sm:h-80 bg-slate-100 rounded-2xl overflow-hidden mb-3">
-        <img
+      <div className="relative w-full h-64 sm:h-80 bg-slate-100 rounded-2xl overflow-hidden mb-3">
+        <Image
           src={sorted[active].image_url}
           alt={`Property image ${active + 1}`}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, 800px"
+          priority
         />
       </div>
 
@@ -134,16 +138,18 @@ function Gallery({ images, emoji }: { images: PropertyImage[]; emoji: string }) 
             <button
               key={img.id}
               onClick={() => setActive(i)}
-              className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
+              className={`relative shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
                 i === active
                   ? 'border-emerald-500 shadow-sm'
                   : 'border-slate-200 hover:border-slate-300'
               }`}
             >
-              <img
+              <Image
                 src={img.image_url}
                 alt={`Thumbnail ${i + 1}`}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="64px"
               />
             </button>
           ))}

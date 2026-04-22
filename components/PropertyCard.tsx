@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import type { Property, PropertyStatus } from '@/types'
 
 const STATUS_STYLES: Record<PropertyStatus, { label: string; bg: string; text: string; btnBg: string }> = {
@@ -54,11 +55,12 @@ export default function PropertyCard({ property, onStatusChange, onClick }: Prop
     >
       <div className="relative h-40 bg-slate-100 flex items-center justify-center overflow-hidden">
         {primaryImg ? (
-          <img
+          <Image
             src={primaryImg}
             alt={property.title}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
           <span className="text-5xl select-none">{emoji}</span>
