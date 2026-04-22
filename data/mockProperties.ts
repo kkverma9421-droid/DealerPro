@@ -366,7 +366,7 @@ export const mockProperties: MockProperty[] = [
     locality:      'Parikrama Marg',
     price:         1800000,
     property_type: 'plot',
-    area:     100,
+    area:          100,
     bedrooms:      undefined,
     bathrooms:     undefined,
     category:      'residential',
@@ -379,11 +379,209 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026C,
     updated_at:    D2026C,
-    // Images: road-facing plot → parikrama path street → surrounding land → utility pole at boundary
     property_images: [
-      mkImg('mock-10', 0, 'road-facing-open-plot-small', true),
-      mkImg('mock-10', 1, 'parikrama-marg-pilgrims-road', false),
-      mkImg('mock-10', 2, 'surrounding-open-land-govardhan', false),
+      mkImg('mock-10', 0, 'road-facing-open-plot-small',       true),
+      mkImg('mock-10', 1, 'parikrama-marg-pilgrims-road',      false),
+      mkImg('mock-10', 2, 'surrounding-open-land-govardhan',   false),
+    ],
+  },
+
+  // ── 11  Raman Reti · Gokul · Plot ────────────────────────────────────────
+  {
+    id:            'mock-11',
+    property_id:   'DP-GK001',
+    title:         '150 Sq Yd Yamuna-Facing Plot — Raman Reti, Gokul',
+    description:
+      'Serene residential plot on the banks of Yamuna in the holy Raman Reti, Gokul. ' +
+      'Walking distance from Brahmaand Ghat. Suitable for ashram, guesthouse, or weekend ' +
+      'home. Peaceful surroundings with easy Mathura highway access.',
+    city:          'Gokul',
+    locality:      'Raman Reti',
+    price:         2800000,
+    property_type: 'plot',
+    area:          150,
+    bedrooms:      undefined,
+    bathrooms:     undefined,
+    category:      'residential',
+    owner_name:    'Nand Kishore Pandey',
+    owner_phone:   '+91-9411223344',
+    status:        'available' as PropertyStatus,
+    featured:      false,
+    latitude:      27.4415,
+    longitude:     77.7385,
+    created_by:    SYS,
+    created_at:    D2026A,
+    updated_at:    D2026A,
+    property_images: [
+      mkImg('mock-11', 0, 'yamuna-riverbank-sandy-plot',       true),
+      mkImg('mock-11', 1, 'ghat-road-riverside-path',          false),
+      mkImg('mock-11', 2, 'open-land-near-river-gokul',        false),
+    ],
+  },
+
+  // ── 12  Brahmaand Ghat Road · Gokul · Villa ──────────────────────────────
+  {
+    id:            'mock-12',
+    property_id:   'DP-GK002',
+    title:         '2 BHK Devotee Villa — Brahmaand Ghat Road, Gokul',
+    description:
+      'Tranquil 2 BHK villa with Yamuna-side courtyard, tulsi garden, and open terrace ' +
+      'offering views of Brahmaand Ghat. Solar water heater, bore well. 500 m from ' +
+      'Navneet Priya Ji Temple. Ideal for spiritual retreat or permanent residence.',
+    city:          'Gokul',
+    locality:      'Brahmaand Ghat Road',
+    price:         4200000,
+    property_type: 'villa',
+    area:          800,
+    bedrooms:      2,
+    bathrooms:     2,
+    category:      'residential',
+    owner_name:    'Vrajanand Goswami',
+    owner_phone:   '+91-9837654321',
+    status:        'available' as PropertyStatus,
+    featured:      false,
+    latitude:      27.4408,
+    longitude:     77.7393,
+    created_by:    SYS,
+    created_at:    D2026B,
+    updated_at:    D2026B,
+    property_images: [
+      mkImg('mock-12', 0, 'small-villa-ghat-view-terrace',     true),
+      mkImg('mock-12', 1, 'tulsi-plant-courtyard-home',        false),
+      mkImg('mock-12', 2, 'open-terrace-riverside-morning',    false),
+      mkImg('mock-12', 3, 'village-lane-green-surroundings',   false),
+    ],
+  },
+
+  // ── 13  Dauji Temple Area · Baldeo · Shop ────────────────────────────────
+  {
+    id:            'mock-13',
+    property_id:   'DP-BD001',
+    title:         'Commercial Shop — Dauji Temple Area, Baldeo',
+    description:
+      'Prime ground-floor shop on the high-footfall pilgrim route to Dauji (Baldev) Temple. ' +
+      '280 sq ft, glass-shutter frontage, ideal for prasad, flowers, or religious goods. ' +
+      'Rental income potential: ₹18,000/month. Clear title, immediate possession.',
+    city:          'Baldeo',
+    locality:      'Dauji Temple Area',
+    price:         2600000,
+    property_type: 'shop',
+    area:          280,
+    bedrooms:      undefined,
+    bathrooms:     1,
+    category:      'commercial',
+    owner_name:    'Suresh Chandra Pathak',
+    owner_phone:   '+91-9760123456',
+    status:        'available' as PropertyStatus,
+    featured:      false,
+    latitude:      27.4185,
+    longitude:     77.8430,
+    created_by:    SYS,
+    created_at:    D2026B,
+    updated_at:    D2026B,
+    property_images: [
+      mkImg('mock-13', 0, 'temple-road-corner-shop-front',     true),
+      mkImg('mock-13', 1, 'pilgrim-street-market-baldeo',      false),
+      mkImg('mock-13', 2, 'retail-glass-shutter-facade',       false),
+    ],
+  },
+
+  // ── 14  Old Town Baldeo · Baldeo · Residential Plot ──────────────────────
+  {
+    id:            'mock-14',
+    property_id:   'DP-BD002',
+    title:         '120 Sq Yd Residential Plot — Old Town Baldeo',
+    description:
+      'Well-located plot in the established Old Town area of Baldeo. Paved approach road, ' +
+      'electricity and municipal water supply at boundary. 5 min walk to Dauji Temple ' +
+      'and Main Bazar. Suitable for individual house or small guesthouse.',
+    city:          'Baldeo',
+    locality:      'Old Town Baldeo',
+    price:         1500000,
+    property_type: 'plot',
+    area:          120,
+    bedrooms:      undefined,
+    bathrooms:     undefined,
+    category:      'residential',
+    owner_name:    'Kamta Prasad Yadav',
+    owner_phone:   '+91-9412098765',
+    status:        'requirement' as PropertyStatus,
+    featured:      false,
+    latitude:      27.4172,
+    longitude:     77.8418,
+    created_by:    SYS,
+    created_at:    D2026C,
+    updated_at:    D2026C,
+    property_images: [
+      mkImg('mock-14', 0, 'residential-plot-old-town-lane',    true),
+      mkImg('mock-14', 1, 'paved-road-local-colony-homes',     false),
+    ],
+  },
+
+  // ── 15  Brahmaand Ghat Area · Mahavan · Plot ─────────────────────────────
+  {
+    id:            'mock-15',
+    property_id:   'DP-MV001',
+    title:         '200 Sq Yd Riverfront Plot — Brahmaand Ghat, Mahavan',
+    description:
+      'Rare riverfront plot adjacent to the sacred Brahmaand Ghat in Mahavan. Ideal for ' +
+      'dharamshala, yatri niwas, or peaceful residential construction. Yamuna river view, ' +
+      'surrounded by temples. Title clear, NOC obtained.',
+    city:          'Mahavan',
+    locality:      'Brahmaand Ghat Area',
+    price:         3100000,
+    property_type: 'plot',
+    area:          200,
+    bedrooms:      undefined,
+    bathrooms:     undefined,
+    category:      'residential',
+    owner_name:    'Govind Swami Das',
+    owner_phone:   '+91-9837001122',
+    status:        'available' as PropertyStatus,
+    featured:      true,
+    latitude:      27.4682,
+    longitude:     77.7188,
+    created_by:    SYS,
+    created_at:    D2026A,
+    updated_at:    D2026A,
+    property_images: [
+      mkImg('mock-15', 0, 'yamuna-ghat-sacred-plot-view',      true),
+      mkImg('mock-15', 1, 'riverside-temple-surroundings',     false),
+      mkImg('mock-15', 2, 'open-land-near-river-gokul',        false),
+      mkImg('mock-15', 3, 'ghat-road-riverside-path',          false),
+    ],
+  },
+
+  // ── 16  Main Bazar · Mahavan · Builder Floor ─────────────────────────────
+  {
+    id:            'mock-16',
+    property_id:   'DP-MV002',
+    title:         '2 BHK Builder Floor — Main Bazar, Mahavan',
+    description:
+      'Ready-to-move 2 BHK builder floor above the bustling Main Bazar of Mahavan. ' +
+      'Tiles flooring, attached kitchen, covered terrace access. Just 5 min from ' +
+      'Brahmaand Ghat and Gokul. Excellent rental potential from pilgrims and devotees.',
+    city:          'Mahavan',
+    locality:      'Main Bazar Mahavan',
+    price:         2900000,
+    property_type: 'builder_floor',
+    area:          900,
+    bedrooms:      2,
+    bathrooms:     2,
+    category:      'residential',
+    owner_name:    'Ramavatar Singh',
+    owner_phone:   '+91-9555334455',
+    status:        'hold' as PropertyStatus,
+    featured:      false,
+    latitude:      27.4676,
+    longitude:     77.7180,
+    created_by:    SYS,
+    created_at:    D2026C,
+    updated_at:    D2026C,
+    property_images: [
+      mkImg('mock-16', 0, 'builder-floor-front-elevation',     true),
+      mkImg('mock-16', 1, 'main-bazar-street-market-view',     false),
+      mkImg('mock-16', 2, 'covered-terrace-access-stairway',   false),
     ],
   },
 ]
