@@ -25,9 +25,9 @@ export interface Property {
   featured:      boolean
   latitude?:     number
   longitude?:    number
-  created_by:    string
-  created_at:       string
-  updated_at:       string
+  created_by?:   string
+  created_at:    string
+  updated_at:    string
   property_images?: PropertyImage[]
 }
 
@@ -42,18 +42,26 @@ export interface User {
   created_at:      string
 }
 
+export type LeadStage = 'new_inquiry' | 'contacted' | 'visit_scheduled' | 'negotiation' | 'closed' | 'lost'
+
 export interface Lead {
-  id:                 string
-  lead_number:        string
-  client_name:        string
-  client_phone?:      string
-  client_email?:      string
-  budget_min?:        number
-  budget_max?:        number
+  id:                  string
+  lead_number:         string
+  client_name:         string
+  client_phone?:       string
+  client_email?:       string
+  budget_min?:         number
+  budget_max?:         number
   preferred_location?: string
-  stage:              'new_inquiry' | 'contacted' | 'visit_scheduled' | 'negotiation' | 'closed' | 'lost'
-  source:             string
-  follow_up_date?:    string
-  notes?:             string
-  created_at:         string
+  preferred_type?:     string
+  property_interest?:  string
+  stage:               LeadStage
+  source:              string
+  priority:            'low' | 'medium' | 'high' | 'urgent'
+  assigned_to?:        string
+  follow_up_date?:     string
+  last_contacted?:     string
+  notes?:              string
+  created_at:          string
+  updated_at:          string
 }
