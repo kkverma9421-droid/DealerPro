@@ -18,11 +18,14 @@ export default function Sidebar({ activeKey = 'dashboard' }: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <aside className="w-[220px] shrink-0 bg-[#1e3a5f] flex flex-col h-screen sticky top-0 overflow-y-auto">
+    <aside className="w-55 shrink-0 bg-[#1e3a5f] flex flex-col h-screen sticky top-0 overflow-y-auto">
       {/* Brand */}
-      <div className="px-5 py-6 border-b border-white/[0.06]">
+      <div className="px-5 pt-6 pb-4.5 border-b border-white/6">
         <Link href="/dashboard" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-lg shrink-0">
+          <div
+            className="shrink-0 flex items-center justify-center text-lg"
+            style={{ width: 38, height: 38, borderRadius: 11, background: '#00C47A' }}
+          >
             🏠
           </div>
           <div className="leading-tight">
@@ -30,31 +33,44 @@ export default function Sidebar({ activeKey = 'dashboard' }: SidebarProps) {
               Dealer<span className="text-emerald-400">Pro</span>
             </div>
             <div className="text-[9px] text-white/30 font-medium tracking-wide">
-              SRKG Properties
+              by Shri Ram Krishna Group
             </div>
           </div>
         </Link>
       </div>
 
       {/* Nav items */}
-      <nav className="flex-1 px-2.5 py-3">
+      <nav className="flex-1 overflow-y-auto" style={{ padding: '12px 10px' }}>
         {NAV_ITEMS.map(item => {
           const isActive = pathname === item.href || activeKey === item.key
           return (
             <Link
               key={item.key}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all mb-0.5 relative ${
-                isActive
-                  ? 'bg-emerald-500/[0.12] text-emerald-400'
-                  : 'text-white/50 hover:text-white hover:bg-white/[0.06]'
-              }`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '10px 16px',
+                borderRadius: 12,
+                marginBottom: 2,
+                position: 'relative',
+                transition: 'background 0.15s, color 0.15s',
+                background: isActive ? 'rgba(0,196,122,0.12)' : 'transparent',
+                color:      isActive ? '#00C47A' : 'rgba(255,255,255,0.5)',
+              }}
+              className="hover:bg-white/6 hover:text-white!"
             >
               {isActive && (
-                <div className="absolute left-0 top-[20%] bottom-[20%] w-[3px] rounded-r bg-emerald-400" />
+                <div
+                  className="absolute left-0 rounded-r bg-[#00C47A]"
+                  style={{ top: '20%', bottom: '20%', width: 3 }}
+                />
               )}
-              <span className="text-[18px] w-5 text-center leading-none">{item.icon}</span>
-              <span className={`text-sm ${isActive ? 'font-bold' : 'font-medium'}`}>
+              <span className="text-[18px] leading-none text-center" style={{ width: 20 }}>
+                {item.icon}
+              </span>
+              <span className={`text-[13px] ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {item.label}
               </span>
             </Link>
@@ -63,9 +79,18 @@ export default function Sidebar({ activeKey = 'dashboard' }: SidebarProps) {
       </nav>
 
       {/* User profile */}
-      <div className="px-5 py-4 border-t border-white/[0.06]">
+      <div className="border-t border-white/6" style={{ padding: '16px 20px' }}>
         <div className="flex items-center gap-2.5 cursor-pointer group">
-          <div className="w-8 h-8 rounded-[10px] bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400 shrink-0">
+          <div
+            className="flex items-center justify-center text-xs font-bold text-emerald-400 shrink-0"
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 10,
+              background: 'rgba(0,196,122,0.13)',
+              border: '1.5px solid rgba(0,196,122,0.27)',
+            }}
+          >
             SK
           </div>
           <div className="min-w-0">

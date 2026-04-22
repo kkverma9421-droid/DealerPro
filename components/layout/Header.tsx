@@ -7,7 +7,14 @@ interface HeaderProps {
 
 export default function Header({ title, subtitle }: HeaderProps) {
   return (
-    <header className="bg-white border-b border-[#E8ECF4] px-6 h-[60px] flex items-center justify-between sticky top-0 z-50 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+    <header
+      className="bg-white border-b border-[#E8ECF4] flex items-center justify-between sticky top-0 z-50"
+      style={{
+        height: 60,
+        padding: '0 24px',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+      }}
+    >
       <div>
         <div className="text-[15px] font-bold text-[#0B1120]">{title}</div>
         {subtitle && (
@@ -18,13 +25,19 @@ export default function Header({ title, subtitle }: HeaderProps) {
       <div className="flex items-center gap-2.5">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[13px] font-bold rounded-xl transition"
+          style={{ borderRadius: 12, padding: '7px 14px' }}
+          className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[13px] font-bold transition"
         >
           📋 Follow-ups
         </Link>
         <Link
           href="/add-property"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] font-bold rounded-xl transition shadow-[0_2px_8px_rgba(0,196,122,0.2)]"
+          style={{
+            borderRadius: 12,
+            padding: '7px 14px',
+            boxShadow: '0 2px 8px rgba(0,196,122,0.2)',
+          }}
+          className="inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] font-bold transition"
         >
           + Add Property
         </Link>

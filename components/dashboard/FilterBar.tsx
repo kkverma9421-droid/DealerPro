@@ -43,7 +43,13 @@ export default function FilterBar({
   onSearch, onStatus, onType, onSort,
 }: FilterBarProps) {
   return (
-    <div className="sticky top-0 z-40 bg-[#F0F2F7] px-4 pt-3 pb-2.5 border-b border-[#E8ECF4] shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+    <div
+      className="sticky top-0 z-40 bg-[#F0F2F7] border-b border-[#E8ECF4]"
+      style={{
+        padding: '12px 16px 10px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      }}
+    >
       {/* Search */}
       <div className="relative mb-2.5">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400 pointer-events-none select-none">
@@ -54,7 +60,8 @@ export default function FilterBar({
           placeholder="Search title, locality, owner…"
           value={search}
           onChange={e => onSearch(e.target.value)}
-          className="w-full pl-9 pr-4 py-2.5 border border-[#E8ECF4] rounded-xl text-[13px] font-medium bg-white text-[#0B1120] placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 transition"
+          style={{ borderRadius: 12, border: '1.5px solid #E8ECF4' }}
+          className="w-full pl-9 pr-4 py-2.5 text-[13px] font-medium bg-white text-[#0B1120] placeholder:text-slate-400 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 transition"
         />
       </div>
 
@@ -65,11 +72,18 @@ export default function FilterBar({
           <button
             key={t.value}
             onClick={() => onStatus(t.value as StatusFilterValue)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shrink-0 transition-all ${
-              statusFilter === t.value
-                ? 'bg-[#0B1120] text-white shadow-sm'
-                : 'bg-white text-[#64748B] hover:bg-slate-100'
-            }`}
+            style={{
+              borderRadius: 20,
+              padding: '6px 12px',
+              background: statusFilter === t.value ? '#0B1120' : '#fff',
+              color:      statusFilter === t.value ? '#fff'    : '#64748B',
+              fontWeight: statusFilter === t.value ? 700       : 600,
+              fontSize: 12,
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+              transition: 'background 0.15s, color 0.15s',
+              boxShadow: statusFilter === t.value ? '0 1px 4px rgba(0,0,0,0.12)' : 'none',
+            }}
           >
             {t.label}
           </button>
@@ -81,7 +95,8 @@ export default function FilterBar({
         <select
           value={typeFilter}
           onChange={e => onType(e.target.value)}
-          className="px-2.5 py-1.5 rounded-full border border-[#E8ECF4] text-[11px] font-semibold bg-white text-[#64748B] focus:outline-none focus:border-emerald-400 cursor-pointer shrink-0 appearance-none"
+          style={{ borderRadius: 20, border: '1.5px solid #E8ECF4', padding: '6px 10px' }}
+          className="text-[11px] font-semibold bg-white text-[#64748B] focus:outline-none focus:border-emerald-400 cursor-pointer shrink-0 appearance-none"
         >
           {TYPE_OPTIONS.map(t => (
             <option key={t.value} value={t.value}>{t.label}</option>
@@ -92,7 +107,8 @@ export default function FilterBar({
         <select
           value={sortBy}
           onChange={e => onSort(e.target.value as SortOption)}
-          className="px-2.5 py-1.5 rounded-full border border-[#E8ECF4] text-[11px] font-semibold bg-white text-[#64748B] focus:outline-none focus:border-emerald-400 cursor-pointer shrink-0 appearance-none"
+          style={{ borderRadius: 20, border: '1.5px solid #E8ECF4', padding: '6px 10px' }}
+          className="text-[11px] font-semibold bg-white text-[#64748B] focus:outline-none focus:border-emerald-400 cursor-pointer shrink-0 appearance-none"
         >
           <option value="newest">Newest first</option>
           <option value="price_asc">Price ↑</option>

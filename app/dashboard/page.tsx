@@ -35,7 +35,12 @@ function KpiCard({
   sub?:    string
 }) {
   return (
-    <div className="bg-white rounded-2xl p-4 border border-[#E8ECF4] shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+    <div
+      className="bg-white rounded-2xl p-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)] transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] cursor-default group"
+      style={{ border: '1.5px solid #E8ECF4' }}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = accent + '55')}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = '#E8ECF4')}
+    >
       <div className="flex items-start justify-between mb-2">
         <span className="text-[22px] leading-none">{icon}</span>
         <span
