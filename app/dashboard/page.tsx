@@ -1,13 +1,17 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { useRouter }     from 'next/navigation'
-import Link              from 'next/link'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+
 import { supabase }      from '@/lib/supabase/client'
-import PropertyCard      from '@/components/PropertyCard'
-import AppNavbar         from '@/components/AppNavbar'
 import { mockProperties } from '@/data/mockProperties'
 import type { Property, PropertyStatus } from '@/types'
+
+import Sidebar      from '@/components/layout/Sidebar'
+import Header       from '@/components/layout/Header'
+import FilterBar, { type SortOption, type StatusFilterValue } from '@/components/dashboard/FilterBar'
+import PropertyGrid from '@/components/dashboard/PropertyGrid'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function fmtPrice(price: number): string {
@@ -18,79 +22,65 @@ function fmtPrice(price: number): string {
 
 // ─── KPI card ─────────────────────────────────────────────────────────────────
 function KpiCard({
-  label, value, icon, valueClass = 'text-slate-800',
+  label,
+  value,
+  icon,
+  accent = '#0B1120',
+  sub,
 }: {
-  label: string; value: number; icon: string; valueClass?: string
+  label:   string
+  value:   number | string
+  icon:    string
+  accent?: string
+  sub?:    string
 }) {
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <span className="text-xl">{icon}</span>
-        <span className={`text-2xl font-extrabold tabular-nums ${valueClass}`}>{value}</span>
+    <div className="bg-white rounded-2xl p-4 border border-[#E8ECF4] shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+      <div className="flex items-start justify-between mb-2">
+        <span className="text-[22px] leading-none">{icon}</span>
+        <span
+          style={{ color: accent }}
+          className="text-[28px] font-extrabold tabular-nums leading-none"
+        >
+          {value}
+        </span>
       </div>
-      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">{label}</p>
+      <p className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-[0.6px]">{label}</p>
+      {sub && <p className="text-[11px] text-[#64748B] mt-0.5">{sub}</p>}
     </div>
   )
 }
 
-// ─── Filter constants ─────────────────────────────────────────────────────────
-const STATUS_TABS = [
-  { value: 'all',         label: 'All',         icon: '🏠' },
-  { value: 'available',   label: 'Available',   icon: '✅' },
-  { value: 'hold',        label: 'On Hold',     icon: '⏳' },
-  { value: 'requirement', label: 'Requirement', icon: '🔍' },
-] as const
-
-const TYPE_OPTIONS = [
-  { value: 'all',           label: 'All Types' },
-  { value: 'plot',          label: 'Plot' },
-  { value: 'apartment',     label: 'Apartment' },
-  { value: 'villa',         label: 'Villa' },
-  { value: 'shop',          label: 'Shop' },
-  { value: 'office',        label: 'Office' },
-  { value: 'builder_floor', label: 'Builder Floor' },
-  { value: 'warehouse',     label: 'Warehouse' },
-  { value: 'other',         label: 'Other' },
-]
-
-// ─── Loading skeletons ────────────────────────────────────────────────────────
-function CardSkeleton() {
-  return <div className="h-64 bg-slate-100 rounded-2xl animate-pulse" />
-}
-
-// ─── Empty state ──────────────────────────────────────────────────────────────
-function EmptyState({ search, onClear }: { search: string; onClear: () => void }) {
+// ─── Mobile bottom nav ────────────────────────────────────────────────────────
+function BottomNav() {
+  const items = [
+    { icon: '🏠', label: 'Home',       href: '/dashboard'    },
+    { icon: '🏘', label: 'Properties', href: '/dashboard'    },
+    { icon: '➕', label: 'Add',        href: '/add-property' },
+    { icon: '🔐', label: 'Sign In',    href: '/login'        },
+  ]
   return (
-    <div className="col-span-full bg-white border border-slate-100 rounded-2xl shadow-sm p-12 text-center">
-      <p className="text-5xl mb-4">{search ? '🔍' : '🏚️'}</p>
-      <h3 className="text-lg font-extrabold text-slate-800">
-        {search ? 'No matching properties' : 'No properties yet'}
-      </h3>
-      <p className="text-sm text-slate-500 mt-2 max-w-xs mx-auto">
-        {search
-          ? `Nothing found for "${search}". Try a different search.`
-          : 'Start building your inventory by adding the first listing.'}
-      </p>
-      {search ? (
-        <button
-          onClick={onClear}
-          className="mt-5 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-xl transition"
-        >
-          Clear search
-        </button>
-      ) : (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white border-t border-[#E8ECF4] flex shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+      {items.map((item, i) => (
         <Link
-          href="/add-property"
-          className="inline-block mt-5 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl transition"
+          key={i}
+          href={item.href}
+          className="flex-1 flex flex-col items-center justify-center py-2.5 gap-0.5 text-[#94A3B8] hover:text-emerald-600 transition-colors"
         >
-          + Add First Property
+          <span className="text-[20px] leading-tight">{item.icon}</span>
+          <span className="text-[9px] font-semibold tracking-wide">{item.label}</span>
         </Link>
-      )}
-    </div>
+      ))}
+    </nav>
   )
 }
 
-// ─── Main page ────────────────────────────────────────────────────────────────
+// ─── Skeleton for KPI row ─────────────────────────────────────────────────────
+function KpiSkeleton() {
+  return <div className="h-21 bg-slate-100 rounded-2xl animate-pulse" />
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const router = useRouter()
 
@@ -98,9 +88,9 @@ export default function DashboardPage() {
   const [loading,      setLoading]      = useState(true)
   const [isMock,       setIsMock]       = useState(false)
   const [search,       setSearch]       = useState('')
-  const [statusFilter, setStatusFilter] = useState<PropertyStatus | 'all'>('all')
+  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>('all')
   const [typeFilter,   setTypeFilter]   = useState('all')
-  const [sortBy,       setSortBy]       = useState<'newest' | 'price_asc' | 'price_desc'>('newest')
+  const [sortBy,       setSortBy]       = useState<SortOption>('newest')
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -126,12 +116,13 @@ export default function DashboardPage() {
 
   // ── Status update ──────────────────────────────────────────────────────────
   function handleStatusChange(id: string, status: PropertyStatus) {
-    if (isMock) return
     supabase
       .from('properties')
       .update({ status })
       .eq('id', id)
-      .then(() => setProperties(prev => prev.map(p => p.id === id ? { ...p, status } : p)))
+      .then(() =>
+        setProperties(prev => prev.map(p => p.id === id ? { ...p, status } : p))
+      )
   }
 
   // ── KPIs ───────────────────────────────────────────────────────────────────
@@ -140,13 +131,14 @@ export default function DashboardPage() {
     available:   properties.filter(p => p.status === 'available').length,
     hold:        properties.filter(p => p.status === 'hold').length,
     requirement: properties.filter(p => p.status === 'requirement').length,
+    sold:        properties.filter(p => p.status === 'sold').length,
   }), [properties])
 
   // ── Filter + sort ──────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
     let list = properties.filter(p => {
       if (statusFilter !== 'all' && p.status !== statusFilter) return false
-      if (typeFilter   !== 'all' && p.property_type !== typeFilter) return false
+      if (typeFilter !== 'all' && p.property_type !== typeFilter) return false
       if (search) {
         const q = search.toLowerCase()
         return (
@@ -161,167 +153,139 @@ export default function DashboardPage() {
 
     if (sortBy === 'price_asc')  list = [...list].sort((a, b) => a.price - b.price)
     if (sortBy === 'price_desc') list = [...list].sort((a, b) => b.price - a.price)
-    // 'newest' is default from fetch order
 
     return list
   }, [properties, statusFilter, typeFilter, search, sortBy])
 
+  // ── Price summary ──────────────────────────────────────────────────────────
+  const priceStats = useMemo(() => {
+    if (loading || isMock || filtered.length < 2) return null
+    const prices = filtered.map(p => p.price)
+    return {
+      min: Math.min(...prices),
+      max: Math.max(...prices),
+      avg: Math.round(prices.reduce((s, v) => s + v, 0) / prices.length),
+    }
+  }, [filtered, loading, isMock])
+
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AppNavbar
-        right={
+    <div className="flex min-h-screen bg-[#F0F2F7] font-sans">
+
+      {/* ── Desktop sidebar ── */}
+      <div className="hidden lg:block">
+        <Sidebar activeKey="dashboard" />
+      </div>
+
+      {/* ── Main column ── */}
+      <div className="flex-1 flex flex-col min-w-0">
+
+        {/* Desktop header */}
+        <div className="hidden lg:block">
+          <Header
+            title="Property Dashboard"
+            subtitle="Mathura · Vrindavan · Govardhan · Brij region"
+          />
+        </div>
+
+        {/* Mobile top bar */}
+        <div className="lg:hidden bg-white border-b border-[#E8ECF4] px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-30">
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <span className="text-2xl leading-none">🏠</span>
+            <div className="leading-tight">
+              <span className="text-[17px] font-extrabold text-[#0B1120] group-hover:text-emerald-700 transition-colors">
+                Dealer<span className="text-emerald-500">Pro</span>
+              </span>
+              <p className="text-[9px] text-slate-400 font-medium tracking-wide">
+                by Shri Ram Krishna Group
+              </p>
+            </div>
+          </Link>
           <Link
             href="/add-property"
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl transition"
+            className="inline-flex items-center gap-1 px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] font-bold rounded-xl transition"
           >
-            <span className="text-base leading-none">+</span> Add Property
+            + Add
           </Link>
-        }
-      />
+        </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+        {/* ── Scrollable content ── */}
+        <div className="flex-1 overflow-y-auto pb-20 lg:pb-8">
 
-        {/* ── Page header ── */}
-        <div className="flex items-start justify-between gap-4 mb-6">
-          <div>
-            <h1 className="text-2xl font-extrabold text-slate-800">Property Dashboard</h1>
-            <p className="text-sm text-slate-500 mt-0.5">
-              Mathura · Vrindavan · Govardhan · Brij region
-            </p>
+          {/* KPI section */}
+          <div className="px-4 pt-5 pb-0">
+            {/* Mock badge */}
+            {isMock && !loading && (
+              <div className="flex justify-end mb-3">
+                <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full">
+                  📋 Sample data — connect Supabase to go live
+                </span>
+              </div>
+            )}
+
+            {/* KPI grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
+              {loading ? (
+                Array.from({ length: 4 }).map((_, i) => <KpiSkeleton key={i} />)
+              ) : (
+                <>
+                  <KpiCard label="Total Listings" value={kpis.total}       icon="🏠" accent="#0B1120" />
+                  <KpiCard label="Available"       value={kpis.available}   icon="✅" accent="#00C47A" />
+                  <KpiCard label="On Hold"         value={kpis.hold}        icon="⏳" accent="#F59E0B" />
+                  <KpiCard label="Buy Requirement" value={kpis.requirement} icon="🔍" accent="#6366F1" />
+                </>
+              )}
+            </div>
           </div>
-          {isMock && !loading && (
-            <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full shrink-0">
-              📋 Sample data
-            </span>
-          )}
-        </div>
 
-        {/* ── KPI cards ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-          {loading ? (
-            Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-20 bg-slate-100 rounded-2xl animate-pulse" />
-            ))
-          ) : (
-            <>
-              <KpiCard label="Total Listings"  value={kpis.total}       icon="🏠" />
-              <KpiCard label="Available"        value={kpis.available}   icon="✅" valueClass="text-emerald-600" />
-              <KpiCard label="On Hold"          value={kpis.hold}        icon="⏳" valueClass="text-amber-600" />
-              <KpiCard label="Buy Requirement"  value={kpis.requirement} icon="🔍" valueClass="text-blue-600" />
-            </>
-          )}
-        </div>
+          {/* Filter bar */}
+          <FilterBar
+            search={search}
+            statusFilter={statusFilter}
+            typeFilter={typeFilter}
+            sortBy={sortBy}
+            count={filtered.length}
+            onSearch={setSearch}
+            onStatus={setStatusFilter}
+            onType={setTypeFilter}
+            onSort={setSortBy}
+          />
 
-        {/* ── Search + filter bar ── */}
-        <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-4 mb-6 space-y-3">
-          {/* Search */}
-          <div className="relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-              🔍
-            </span>
-            <input
-              type="search"
-              placeholder="Search title, locality, owner…"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:bg-white transition"
+          {/* Property grid */}
+          <div className="px-4 py-4">
+            <PropertyGrid
+              properties={filtered}
+              loading={loading}
+              isMock={isMock}
+              search={search}
+              onClearSearch={() => setSearch('')}
+              onStatusChange={handleStatusChange}
+              onPropertyClick={id => router.push(`/property/${id}`)}
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Status tabs */}
-            {STATUS_TABS.map(tab => (
-              <button
-                key={tab.value}
-                onClick={() => setStatusFilter(tab.value as PropertyStatus | 'all')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition ${
-                  statusFilter === tab.value
-                    ? 'bg-emerald-500 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {tab.icon} {tab.label}
-              </button>
-            ))}
-
-            {/* Separator */}
-            <span className="hidden sm:block w-px h-5 bg-slate-200" />
-
-            {/* Type filter */}
-            <select
-              value={typeFilter}
-              onChange={e => setTypeFilter(e.target.value)}
-              className="px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
-            >
-              {TYPE_OPTIONS.map(t => (
-                <option key={t.value} value={t.value}>{t.label}</option>
-              ))}
-            </select>
-
-            {/* Sort */}
-            <select
-              value={sortBy}
-              onChange={e => setSortBy(e.target.value as typeof sortBy)}
-              className="px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
-            >
-              <option value="newest">Newest first</option>
-              <option value="price_asc">Price: Low → High</option>
-              <option value="price_desc">Price: High → Low</option>
-            </select>
-          </div>
+          {/* Price summary footer */}
+          {priceStats && (
+            <div className="mx-4 mb-4 bg-white border border-[#E8ECF4] rounded-2xl shadow-sm px-5 py-4 flex flex-wrap gap-6">
+              <div>
+                <p className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wide">Lowest</p>
+                <p className="text-base font-extrabold text-emerald-600 mt-0.5">{fmtPrice(priceStats.min)}</p>
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wide">Highest</p>
+                <p className="text-base font-extrabold text-[#0B1120] mt-0.5">{fmtPrice(priceStats.max)}</p>
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wide">Avg Price</p>
+                <p className="text-base font-extrabold text-[#0B1120] mt-0.5">{fmtPrice(priceStats.avg)}</p>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* ── Results count ── */}
-        {!loading && (
-          <p className="text-xs text-slate-400 mb-4 px-1">
-            {filtered.length} {filtered.length === 1 ? 'property' : 'properties'}
-            {search && <> for <span className="font-semibold text-slate-600">&ldquo;{search}&rdquo;</span></>}
-            {statusFilter !== 'all' && <> · {STATUS_TABS.find(t => t.value === statusFilter)?.label}</>}
-          </p>
-        )}
-
-        {/* ── Grid ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {loading
-            ? Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)
-            : filtered.length === 0
-              ? <EmptyState search={search} onClear={() => setSearch('')} />
-              : filtered.map(p => (
-                  <PropertyCard
-                    key={p.id}
-                    property={p}
-                    onStatusChange={isMock ? undefined : handleStatusChange}
-                    onClick={() => router.push(`/property/${p.id}`)}
-                  />
-                ))
-          }
-        </div>
-
-        {/* ── Price summary footer (only when live data) ── */}
-        {!loading && !isMock && filtered.length > 1 && (
-          <div className="mt-6 bg-white border border-slate-100 rounded-2xl shadow-sm px-5 py-4 flex flex-wrap gap-6">
-            <div>
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Lowest</p>
-              <p className="text-base font-extrabold text-emerald-600 mt-0.5">
-                {fmtPrice(Math.min(...filtered.map(p => p.price)))}
-              </p>
-            </div>
-            <div>
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Highest</p>
-              <p className="text-base font-extrabold text-slate-800 mt-0.5">
-                {fmtPrice(Math.max(...filtered.map(p => p.price)))}
-              </p>
-            </div>
-            <div>
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Avg Price</p>
-              <p className="text-base font-extrabold text-slate-800 mt-0.5">
-                {fmtPrice(Math.round(filtered.reduce((s, p) => s + p.price, 0) / filtered.length))}
-              </p>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Mobile bottom nav */}
+      <BottomNav />
     </div>
   )
 }
