@@ -7,8 +7,6 @@ export interface MockProperty extends Property {
 }
 
 // ─── Image factory ────────────────────────────────────────────────────────────
-// Uses Picsum Photos (https://picsum.photos) — free, CDN-backed, seed-stable.
-// Same seed always returns the same photograph, so gallery order is deterministic.
 function mkImg(
   propId:  string,
   n:       number,
@@ -34,20 +32,20 @@ const D2026C = '2026-03-05T11:00:00.000Z'
 // ─── Mock properties ──────────────────────────────────────────────────────────
 export const mockProperties: MockProperty[] = [
 
-  // ── 1  HariHar Dham Colony · Mathura · Plot ───────────────────────────────
+  // ── 1  Krishna Nagar · Mathura · Plot ────────────────────────────────────
   {
     id:            'mock-1',
     property_id:   'DP-M001',
-    title:         '200 Sq Yd Residential Plot — HariHar Dham Colony',
+    title:         '200 Sq Yd Residential Plot — Krishna Nagar, Mathura',
     description:
-      'Vastu-friendly corner plot in the fast-developing HariHar Dham Colony, Mathura. ' +
-      'Wide approach road, electricity & water connection available. 5 min from ' +
+      'Vastu-friendly corner plot in the well-developed Krishna Nagar colony, Mathura. ' +
+      'Wide 30-ft approach road, electricity and water connection at boundary. 7 min from ' +
       'Krishna Janmabhoomi. Clear title with immediate possession.',
     city:          'Mathura',
-    locality:      'HariHar Dham Colony',
+    locality:      'Krishna Nagar',
     price:         4500000,
     property_type: 'plot',
-    area:     200,
+    area:          200,
     bedrooms:      undefined,
     bathrooms:     undefined,
     category:      'residential',
@@ -60,29 +58,28 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2025,
     updated_at:    D2025,
-    // Images: open plot → gated colony entrance → paved internal road → adjacent homes
     property_images: [
-      mkImg('mock-1', 0, 'open-land-sunny-plot',      true),
+      mkImg('mock-1', 0, 'open-land-sunny-plot',       true),
       mkImg('mock-1', 1, 'colony-gated-main-entrance', false),
       mkImg('mock-1', 2, 'wide-paved-colony-road',     false),
       mkImg('mock-1', 3, 'nearby-completed-houses',    false),
     ],
   },
 
-  // ── 2  HariHar Dham Colony · Mathura · Builder Floor ──────────────────────
+  // ── 2  Civil Lines · Mathura · Builder Floor ──────────────────────────────
   {
     id:            'mock-2',
     property_id:   'DP-M002',
-    title:         '3 BHK Builder Floor — HariHar Dham Colony, Mathura',
+    title:         '3 BHK Builder Floor — Civil Lines, Mathura',
     description:
-      'Spacious double-height builder floor in HariHar Dham Colony. Italian marble ' +
-      'flooring, modular kitchen, 2-car parking. Located on 30-ft road, 5 min to ' +
-      'Mathura city centre. Immediate possession.',
+      'Spacious double-height builder floor in the prestigious Civil Lines area of Mathura. ' +
+      'Italian marble flooring, modular kitchen, 2-car parking. Located on 40-ft road, ' +
+      '5 min to Mathura city centre. Immediate possession.',
     city:          'Mathura',
-    locality:      'HariHar Dham Colony',
+    locality:      'Civil Lines',
     price:         8500000,
     property_type: 'builder_floor',
-    area:     1800,
+    area:          1800,
     bedrooms:      3,
     bathrooms:     3,
     category:      'residential',
@@ -95,7 +92,6 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026A,
     updated_at:    D2026A,
-    // Images: building exterior → ground-floor entry → 30-ft road → facade close-up → colony street
     property_images: [
       mkImg('mock-2', 0, 'builder-floor-front-elevation', true),
       mkImg('mock-2', 1, 'ground-floor-car-parking',      false),
@@ -105,20 +101,19 @@ export const mockProperties: MockProperty[] = [
     ],
   },
 
-  // ── 3  Mohan Dham Colony · Mathura · Plot ─────────────────────────────────
+  // ── 3  Govind Nagar · Mathura · Plot ──────────────────────────────────────
   {
     id:            'mock-3',
     property_id:   'DP-M003',
-    title:         '150 Sq Yd Plot — Mohan Dham Colony, Mathura',
+    title:         '150 Sq Yd Plot — Govind Nagar, Mathura',
     description:
-      'Prime residential plot in Mohan Dham Colony, Mathura. Surrounded by completed ' +
-      'bungalows, 24-hr water supply. Gated colony entrance. 10 min to Vrindavan Road ' +
-      'and NH-2 highway.',
+      'Prime residential plot in Govind Nagar, Mathura. Surrounded by completed bungalows, ' +
+      '24-hr water supply. Gated colony entrance. 10 min to Vrindavan Road and NH-2 highway.',
     city:          'Mathura',
-    locality:      'Mohan Dham Colony',
+    locality:      'Govind Nagar',
     price:         3200000,
     property_type: 'plot',
-    area:     150,
+    area:          150,
     bedrooms:      undefined,
     bathrooms:     undefined,
     category:      'residential',
@@ -131,29 +126,28 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026A,
     updated_at:    D2026A,
-    // Images: plot with boundary → gated entrance → surrounding bungalows → access road
     property_images: [
-      mkImg('mock-3', 0, 'corner-plot-boundary-wall',  true),
+      mkImg('mock-3', 0, 'corner-plot-boundary-wall',   true),
       mkImg('mock-3', 1, 'decorative-colony-gate-arch', false),
       mkImg('mock-3', 2, 'bungalows-lined-colony',      false),
       mkImg('mock-3', 3, 'colony-internal-road-view',   false),
     ],
   },
 
-  // ── 4  Mohan Dham Colony · Mathura · Apartment ────────────────────────────
+  // ── 4  Vrindavan Road · Mathura · Apartment ───────────────────────────────
   {
     id:            'mock-4',
     property_id:   'DP-M004',
-    title:         '2 BHK Ready-to-Move Flat — Mohan Dham Colony',
+    title:         '2 BHK Ready-to-Move Flat — Vrindavan Road, Mathura',
     description:
-      'Well-maintained 2 BHK apartment with attached balcony. Society amenities include ' +
-      'lift, generator backup, and CCTV. Walking distance from Vrindavan Road bus stop. ' +
-      'Perfect for end-use or rental investment.',
+      'Well-maintained 2 BHK apartment with attached balcony on Vrindavan Road, Mathura. ' +
+      'Society amenities include lift, generator backup, and CCTV. Walking distance from ' +
+      'Vrindavan Road bus stop. Perfect for end-use or rental investment.',
     city:          'Mathura',
-    locality:      'Mohan Dham Colony',
+    locality:      'Vrindavan Road',
     price:         5800000,
     property_type: 'apartment',
-    area:     1100,
+    area:          1100,
     bedrooms:      2,
     bathrooms:     2,
     category:      'residential',
@@ -166,7 +160,6 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026B,
     updated_at:    D2026B,
-    // Images: apartment block exterior → society entrance → balcony row → lift lobby → common garden
     property_images: [
       mkImg('mock-4', 0, 'apartment-block-mathura-view', true),
       mkImg('mock-4', 1, 'society-arch-entrance-gate',   false),
@@ -176,20 +169,20 @@ export const mockProperties: MockProperty[] = [
     ],
   },
 
-  // ── 5  Radha Kunj Residency · Vrindavan · Villa ───────────────────────────
+  // ── 5  Prem Mandir Area · Vrindavan · Villa ───────────────────────────────
   {
     id:            'mock-5',
     property_id:   'DP-V001',
-    title:         'Premium Villa — Radha Kunj Residency, Vrindavan',
+    title:         'Premium 4 BHK Villa — Prem Mandir Area, Vrindavan',
     description:
-      'Luxurious 4 BHK villa with private garden in the coveted Radha Kunj Residency, ' +
-      'Vrindavan. 24-hr security, clubhouse, swimming pool. 800 m from Prem Mandir. ' +
-      'Temple-view from the terrace. A rare opportunity in Vrindavan.',
+      'Luxurious 4 BHK villa with private garden in the coveted Prem Mandir Area, Vrindavan. ' +
+      '24-hr security, clubhouse, swimming pool. 800 m from Prem Mandir. Temple-view from ' +
+      'the terrace. A rare opportunity in Vrindavan.',
     city:          'Vrindavan',
-    locality:      'Radha Kunj Residency',
+    locality:      'Prem Mandir Area',
     price:         18500000,
     property_type: 'villa',
-    area:     3200,
+    area:          3200,
     bedrooms:      4,
     bathrooms:     5,
     category:      'residential',
@@ -202,7 +195,6 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2025,
     updated_at:    D2025,
-    // Images: villa front → private garden → main iron gate → terrace view → side elevation
     property_images: [
       mkImg('mock-5', 0, 'luxury-villa-front-vrindavan', true),
       mkImg('mock-5', 1, 'lush-private-garden-lawn',     false),
@@ -212,20 +204,20 @@ export const mockProperties: MockProperty[] = [
     ],
   },
 
-  // ── 6  Banke Bihari Enclave · Vrindavan · Apartment ──────────────────────
+  // ── 6  Banke Bihari Temple Area · Vrindavan · Apartment ──────────────────
   {
     id:            'mock-6',
     property_id:   'DP-V002',
-    title:         '3 BHK Flat — Banke Bihari Enclave, Vrindavan',
+    title:         '3 BHK Flat — Banke Bihari Temple Area, Vrindavan',
     description:
-      'Spacious 3 BHK on 4th floor in the serene Banke Bihari Enclave. Italian marble ' +
-      'flooring, modular kitchen, power backup. Walking distance to Banke Bihari Temple ' +
-      'and Nidhivan. Ideal for pilgrims seeking a permanent Vrindavan home.',
+      'Spacious 3 BHK on 4th floor near the Banke Bihari Temple. Italian marble flooring, ' +
+      'modular kitchen, power backup. Walking distance to Banke Bihari Mandir and Nidhivan. ' +
+      'Ideal for pilgrims seeking a permanent Vrindavan home.',
     city:          'Vrindavan',
-    locality:      'Banke Bihari Enclave',
+    locality:      'Banke Bihari Temple Area',
     price:         9500000,
     property_type: 'apartment',
-    area:     1450,
+    area:          1450,
     bedrooms:      3,
     bathrooms:     3,
     category:      'residential',
@@ -238,7 +230,6 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026B,
     updated_at:    D2026B,
-    // Images: apartment complex → clubhouse exterior → building lobby → 4th floor balcony
     property_images: [
       mkImg('mock-6', 0, 'apartment-complex-vrindavan',  true),
       mkImg('mock-6', 1, 'society-clubhouse-building',   false),
@@ -247,20 +238,20 @@ export const mockProperties: MockProperty[] = [
     ],
   },
 
-  // ── 7  Banke Bihari Enclave · Vrindavan · Shop ────────────────────────────
+  // ── 7  Raman Reti · Vrindavan · Shop ──────────────────────────────────────
   {
     id:            'mock-7',
     property_id:   'DP-V003',
-    title:         'Commercial Shop — Banke Bihari Enclave, Vrindavan',
+    title:         'Commercial Shop — Raman Reti, Vrindavan',
     description:
-      'Ground-floor corner shop in Banke Bihari Enclave on high-footfall pilgrim route. ' +
+      'Ground-floor corner shop in Raman Reti on high-footfall pilgrim route in Vrindavan. ' +
       '320 sq ft, dedicated parking, ideal for prasad shop, religious bookstore, or café. ' +
       'Rental income potential: ₹25,000/month.',
     city:          'Vrindavan',
-    locality:      'Banke Bihari Enclave',
+    locality:      'Raman Reti',
     price:         3800000,
     property_type: 'shop',
-    area:     320,
+    area:          320,
     bedrooms:      undefined,
     bathrooms:     1,
     category:      'commercial',
@@ -273,7 +264,6 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026C,
     updated_at:    D2026C,
-    // Images: corner shop frontage → commercial strip street → parking bay → shop shutters
     property_images: [
       mkImg('mock-7', 0, 'corner-shop-frontage-day',     true),
       mkImg('mock-7', 1, 'commercial-strip-market-road', false),
@@ -282,20 +272,20 @@ export const mockProperties: MockProperty[] = [
     ],
   },
 
-  // ── 8  Govardhan Green City · Govardhan · Eco Plot ───────────────────────
+  // ── 8  Parikrama Marg · Govardhan · Eco Plot ──────────────────────────────
   {
     id:            'mock-8',
     property_id:   'DP-G001',
-    title:         '200 Sq Yd Eco Plot — Govardhan Green City',
+    title:         '200 Sq Yd Eco Plot — Parikrama Marg, Govardhan',
     description:
-      'RERA-approved residential plot in Govardhan Green City Township. Wide 40-ft ' +
-      'internal roads, solar street lights, RWH system. 1.5 km from Govardhan Parikrama ' +
-      'Marg. Excellent for weekend home or ashram-style living.',
+      'RERA-approved residential plot on the sacred Govardhan Parikrama Marg. Wide 40-ft ' +
+      'internal roads, solar street lights, RWH system. 1.5 km from Govardhan temple. ' +
+      'Excellent for weekend home or ashram-style living.',
     city:          'Govardhan',
-    locality:      'Govardhan Green City',
+    locality:      'Parikrama Marg',
     price:         2200000,
     property_type: 'plot',
-    area:     200,
+    area:          200,
     bedrooms:      undefined,
     bathrooms:     undefined,
     category:      'residential',
@@ -308,7 +298,6 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026A,
     updated_at:    D2026A,
-    // Images: open eco plot → township main gate → solar-lit road → green belt
     property_images: [
       mkImg('mock-8', 0, 'eco-township-open-plot-green', true),
       mkImg('mock-8', 1, 'township-main-gate-govardhan', false),
@@ -317,20 +306,20 @@ export const mockProperties: MockProperty[] = [
     ],
   },
 
-  // ── 9  Govardhan Green City · Govardhan · Ashram Villa ────────────────────
+  // ── 9  Radha Kund Road · Govardhan · Villa ────────────────────────────────
   {
     id:            'mock-9',
     property_id:   'DP-G002',
-    title:         '2 BHK Ashram-Style Villa — Govardhan Green City',
+    title:         '2 BHK Ashram-Style Villa — Radha Kund Road, Govardhan',
     description:
-      'Serene 2 BHK villa with cow-dung plastered walls, tulsi garden, and rooftop ' +
-      'terrace with Govardhan Hill view. Rainwater harvesting, solar panels. Perfect ' +
-      'for spiritual retreat or permanent residence near Govardhan Dham.',
+      'Serene 2 BHK villa with cow-dung plastered walls, tulsi garden, and rooftop terrace ' +
+      'with Govardhan Hill view. Rainwater harvesting, solar panels. Steps from Radha Kund. ' +
+      'Perfect for spiritual retreat or permanent residence near Govardhan Dham.',
     city:          'Govardhan',
-    locality:      'Govardhan Green City',
+    locality:      'Radha Kund Road',
     price:         5600000,
     property_type: 'villa',
-    area:     900,
+    area:          900,
     bedrooms:      2,
     bathrooms:     2,
     category:      'residential',
@@ -343,7 +332,6 @@ export const mockProperties: MockProperty[] = [
     created_by:    SYS,
     created_at:    D2026B,
     updated_at:    D2026B,
-    // Images: eco villa exterior → tulsi courtyard → rooftop terrace → solar panels → garden view
     property_images: [
       mkImg('mock-9', 0, 'ashram-villa-earthy-exterior', true),
       mkImg('mock-9', 1, 'tulsi-plant-courtyard-home',   false),
@@ -353,17 +341,17 @@ export const mockProperties: MockProperty[] = [
     ],
   },
 
-  // ── 10  Parikrama Marg · Govardhan · Plot ─────────────────────────────────
+  // ── 10  Jatipura · Govardhan · Plot ───────────────────────────────────────
   {
     id:            'mock-10',
     property_id:   'DP-G003',
-    title:         '100 Sq Yd Plot on Parikrama Marg — Govardhan',
+    title:         '100 Sq Yd Plot — Jatipura, Govardhan',
     description:
-      'Rare plot directly on the sacred Govardhan Parikrama Marg. High footfall area, ' +
-      'suitable for dharamshala, yatri niwas, or residential use. All utilities at ' +
-      'boundary. Registry and NOC in place.',
+      'Rare plot in the peaceful Jatipura locality of Govardhan. High footfall area near ' +
+      'Mukut Mukharvind Temple. Suitable for dharamshala, yatri niwas, or residential use. ' +
+      'All utilities at boundary. Registry and NOC in place.',
     city:          'Govardhan',
-    locality:      'Parikrama Marg',
+    locality:      'Jatipura',
     price:         1800000,
     property_type: 'plot',
     area:          100,
@@ -380,9 +368,9 @@ export const mockProperties: MockProperty[] = [
     created_at:    D2026C,
     updated_at:    D2026C,
     property_images: [
-      mkImg('mock-10', 0, 'road-facing-open-plot-small',       true),
-      mkImg('mock-10', 1, 'parikrama-marg-pilgrims-road',      false),
-      mkImg('mock-10', 2, 'surrounding-open-land-govardhan',   false),
+      mkImg('mock-10', 0, 'road-facing-open-plot-small',     true),
+      mkImg('mock-10', 1, 'parikrama-marg-pilgrims-road',    false),
+      mkImg('mock-10', 2, 'surrounding-open-land-govardhan', false),
     ],
   },
 
@@ -413,9 +401,9 @@ export const mockProperties: MockProperty[] = [
     created_at:    D2026A,
     updated_at:    D2026A,
     property_images: [
-      mkImg('mock-11', 0, 'yamuna-riverbank-sandy-plot',       true),
-      mkImg('mock-11', 1, 'ghat-road-riverside-path',          false),
-      mkImg('mock-11', 2, 'open-land-near-river-gokul',        false),
+      mkImg('mock-11', 0, 'yamuna-riverbank-sandy-plot',    true),
+      mkImg('mock-11', 1, 'ghat-road-riverside-path',       false),
+      mkImg('mock-11', 2, 'open-land-near-river-gokul',     false),
     ],
   },
 
@@ -426,7 +414,7 @@ export const mockProperties: MockProperty[] = [
     title:         '2 BHK Devotee Villa — Brahmaand Ghat Road, Gokul',
     description:
       'Tranquil 2 BHK villa with Yamuna-side courtyard, tulsi garden, and open terrace ' +
-      'offering views of Brahmaand Ghat. Solar water heater, bore well. 500 m from ' +
+      'offering views of Brahmaand Ghat, Gokul. Solar water heater, bore well. 500 m from ' +
       'Navneet Priya Ji Temple. Ideal for spiritual retreat or permanent residence.',
     city:          'Gokul',
     locality:      'Brahmaand Ghat Road',
@@ -446,10 +434,10 @@ export const mockProperties: MockProperty[] = [
     created_at:    D2026B,
     updated_at:    D2026B,
     property_images: [
-      mkImg('mock-12', 0, 'small-villa-ghat-view-terrace',     true),
-      mkImg('mock-12', 1, 'tulsi-plant-courtyard-home',        false),
-      mkImg('mock-12', 2, 'open-terrace-riverside-morning',    false),
-      mkImg('mock-12', 3, 'village-lane-green-surroundings',   false),
+      mkImg('mock-12', 0, 'small-villa-ghat-view-terrace',   true),
+      mkImg('mock-12', 1, 'tulsi-plant-courtyard-home',      false),
+      mkImg('mock-12', 2, 'open-terrace-riverside-morning',  false),
+      mkImg('mock-12', 3, 'village-lane-green-surroundings', false),
     ],
   },
 
@@ -480,13 +468,13 @@ export const mockProperties: MockProperty[] = [
     created_at:    D2026B,
     updated_at:    D2026B,
     property_images: [
-      mkImg('mock-13', 0, 'temple-road-corner-shop-front',     true),
-      mkImg('mock-13', 1, 'pilgrim-street-market-baldeo',      false),
-      mkImg('mock-13', 2, 'retail-glass-shutter-facade',       false),
+      mkImg('mock-13', 0, 'temple-road-corner-shop-front', true),
+      mkImg('mock-13', 1, 'pilgrim-street-market-baldeo',  false),
+      mkImg('mock-13', 2, 'retail-glass-shutter-facade',   false),
     ],
   },
 
-  // ── 14  Old Town Baldeo · Baldeo · Residential Plot ──────────────────────
+  // ── 14  Old Town Baldeo · Baldeo · Plot ──────────────────────────────────
   {
     id:            'mock-14',
     property_id:   'DP-BD002',
@@ -494,7 +482,7 @@ export const mockProperties: MockProperty[] = [
     description:
       'Well-located plot in the established Old Town area of Baldeo. Paved approach road, ' +
       'electricity and municipal water supply at boundary. 5 min walk to Dauji Temple ' +
-      'and Main Bazar. Suitable for individual house or small guesthouse.',
+      'and Main Bazar Baldeo. Suitable for individual house or small guesthouse.',
     city:          'Baldeo',
     locality:      'Old Town Baldeo',
     price:         1500000,
@@ -513,8 +501,8 @@ export const mockProperties: MockProperty[] = [
     created_at:    D2026C,
     updated_at:    D2026C,
     property_images: [
-      mkImg('mock-14', 0, 'residential-plot-old-town-lane',    true),
-      mkImg('mock-14', 1, 'paved-road-local-colony-homes',     false),
+      mkImg('mock-14', 0, 'residential-plot-old-town-lane',  true),
+      mkImg('mock-14', 1, 'paved-road-local-colony-homes',   false),
     ],
   },
 
@@ -545,10 +533,10 @@ export const mockProperties: MockProperty[] = [
     created_at:    D2026A,
     updated_at:    D2026A,
     property_images: [
-      mkImg('mock-15', 0, 'yamuna-ghat-sacred-plot-view',      true),
-      mkImg('mock-15', 1, 'riverside-temple-surroundings',     false),
-      mkImg('mock-15', 2, 'open-land-near-river-gokul',        false),
-      mkImg('mock-15', 3, 'ghat-road-riverside-path',          false),
+      mkImg('mock-15', 0, 'yamuna-ghat-sacred-plot-view',   true),
+      mkImg('mock-15', 1, 'riverside-temple-surroundings',  false),
+      mkImg('mock-15', 2, 'open-land-near-river-gokul',     false),
+      mkImg('mock-15', 3, 'ghat-road-riverside-path',       false),
     ],
   },
 
@@ -579,9 +567,9 @@ export const mockProperties: MockProperty[] = [
     created_at:    D2026C,
     updated_at:    D2026C,
     property_images: [
-      mkImg('mock-16', 0, 'builder-floor-front-elevation',     true),
-      mkImg('mock-16', 1, 'main-bazar-street-market-view',     false),
-      mkImg('mock-16', 2, 'covered-terrace-access-stairway',   false),
+      mkImg('mock-16', 0, 'builder-floor-front-elevation',   true),
+      mkImg('mock-16', 1, 'main-bazar-street-market-view',   false),
+      mkImg('mock-16', 2, 'covered-terrace-access-stairway', false),
     ],
   },
 ]
