@@ -7,6 +7,7 @@ import Image                   from 'next/image'
 import { supabase }            from '@/lib/supabase/client'
 import type { Property, PropertyImage, PropertyStatus } from '@/types'
 import { getMockById, isMockId } from '@/data/mockProperties'
+import { fmtPrice }              from '@/lib/format'
 
 // Extends the shared type with fields collected in the form but not yet in types/index.ts
 interface PropertyDetail extends Property {
@@ -36,12 +37,6 @@ const STATUS_CONFIG: Record<PropertyStatus, { label: string; bg: string; text: s
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-function formatPrice(price: number): string {
-  if (price >= 10_000_000) return `₹${(price / 10_000_000).toFixed(2)} Cr`
-  if (price >= 100_000)    return `₹${(price / 100_000).toFixed(1)} L`
-  return `₹${price.toLocaleString('en-IN')}`
-}
-
 function capitalize(s: string): string {
   return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
@@ -334,7 +329,7 @@ export default function PropertyDetailPage() {
 
                 {/* Price */}
                 <p className="text-3xl font-extrabold text-emerald-600 mt-4">
-                  {formatPrice(property.price)}
+                  {fmtPrice(property.price)}
                 </p>
 
                 {property.featured && (

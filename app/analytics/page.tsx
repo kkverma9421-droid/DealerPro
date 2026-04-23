@@ -8,19 +8,7 @@ import { supabase }   from '@/lib/supabase/client'
 import { mockProperties } from '@/data/mockProperties'
 import { mockLeads }      from '@/data/mockLeads'
 import type { Property, Lead, LeadStage } from '@/types'
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function fmtPrice(n: number): string {
-  if (n >= 10_000_000) return `₹${(n / 10_000_000).toFixed(1)} Cr`
-  if (n >= 100_000)    return `₹${(n / 100_000).toFixed(0)} L`
-  return `₹${n.toLocaleString('en-IN')}`
-}
-
-function fmtCompact(n: number): string {
-  if (n >= 10_000_000) return `${(n / 10_000_000).toFixed(1)}Cr`
-  if (n >= 100_000)    return `${(n / 100_000).toFixed(0)}L`
-  return n.toLocaleString('en-IN')
-}
+import { fmtPrice, fmtCompact } from '@/lib/format'
 
 // ─── Bar chart ────────────────────────────────────────────────────────────────
 function BarChart({
@@ -60,27 +48,6 @@ function BarChart({
 }
 
 // ─── Donut chart (pure CSS) ───────────────────────────────────────────────────
-function DonutSlice({ offset, value, total, color }: {
-  offset: number; value: number; total: number; color: string
-}) {
-  const pct = total > 0 ? (value / total) * 100 : 0
-  const r   = 40
-  const circ = 2 * Math.PI * r
-  const dash = (pct / 100) * circ
-  const gap  = circ - dash
-  return (
-    <circle
-      cx="50" cy="50" r={r}
-      fill="none"
-      stroke={color}
-      strokeWidth="18"
-      strokeDasharray={`${dash} ${gap}`}
-      strokeDashoffset={-offset}
-      style={{ transition: 'stroke-dasharray 0.5s ease' }}
-    />
-  )
-}
-
 function DonutChart({ slices }: { slices: { label: string; value: number; hex: string }[] }) {
   const total = slices.reduce((s, x) => s + x.value, 0)
   let offset  = 0

@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import type { Property, PropertyStatus } from '@/types'
+import { fmtPrice } from '@/lib/format'
 
 // ─── Status config ────────────────────────────────────────────────────────────
 const STATUS_CFG: Record<PropertyStatus, { label: string; dot: string; bg: string; text: string }> = {
@@ -22,12 +23,6 @@ const TYPE_EMOJI: Record<string, string> = {
   sco:           '🏬',
   penthouse:     '🌟',
   other:         '🏠',
-}
-
-function fmtPrice(price: number): string {
-  if (price >= 10_000_000) return `₹${(price / 10_000_000).toFixed(1)} Cr`
-  if (price >= 100_000)    return `₹${(price / 100_000).toFixed(1)} L`
-  return `₹${price.toLocaleString('en-IN')}`
 }
 
 // ─── Status badge ─────────────────────────────────────────────────────────────

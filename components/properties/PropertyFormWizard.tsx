@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, type ChangeEvent } from 'react'
 import { insertProperty, uploadPropertyImagesAction } from '@/app/add-property/actions'
 import { LocationPicker, type LocationValue } from '@/components/LocationPicker'
+import { fmtPrice } from '@/lib/format'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PROPERTY_TYPES = [
@@ -11,15 +12,6 @@ const PROPERTY_TYPES = [
 ]
 const CATEGORIES = ['residential', 'commercial', 'industrial', 'religious_trust']
 const STATUSES   = ['available', 'hold', 'requirement']
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function fmtPrice(v: string): string {
-  const n = Number(v)
-  if (!n || isNaN(n)) return ''
-  if (n >= 10_000_000) return `₹${(n / 10_000_000).toFixed(2)} Cr`
-  if (n >= 100_000)    return `₹${(n / 100_000).toFixed(1)} L`
-  return `₹${n.toLocaleString('en-IN')}`
-}
 
 // ─── Shared sub-components ────────────────────────────────────────────────────
 function Field({
@@ -260,7 +252,7 @@ export default function PropertyFormWizard({ onSuccess, onCancel }: PropertyForm
                 />
               </div>
               {form.price && !isNaN(Number(form.price)) && Number(form.price) > 0 && (
-                <p className="text-xs text-emerald-600 font-semibold mt-1">{fmtPrice(form.price)}</p>
+                <p className="text-xs text-emerald-600 font-semibold mt-1">{form.price ? fmtPrice(Number(form.price)) : ''}</p>
               )}
             </Field>
 
@@ -444,7 +436,7 @@ export default function PropertyFormWizard({ onSuccess, onCancel }: PropertyForm
               {([
                 ['Title',    form.title],
                 ['Location', `${location.locality}, ${location.city}`],
-                ['Price',    fmtPrice(form.price) || '—'],
+                ['Price',    form.price ? fmtPrice(Number(form.price)) : '—'],
                 ['Type',     form.property_type.replace(/_/g, ' ')],
                 ['Category', form.category.replace(/_/g, ' ')],
                 ['Status',   form.status],

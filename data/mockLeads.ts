@@ -232,11 +232,3 @@ export const mockLeads: Lead[] = [
     updated_at:         '2026-04-22T06:00:00.000Z',
   },
 ]
-
-export function getMockLeadById(id: string): Lead | undefined {
-  return mockLeads.find(l => l.id === id)
-}
-
-export function isMockLeadId(id: string): boolean {
-  return id.startsWith('lead-')
-}

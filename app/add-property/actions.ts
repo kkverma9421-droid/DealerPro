@@ -61,15 +61,16 @@ export async function uploadPropertyImagesAction(
   formData:   FormData,
   propertyId: string,
 ): Promise<UploadResult> {
-  const admin  = createAdminClient()
-  const urls:   string[] = []
-  const errors: string[] = []
+  const admin     = createAdminClient()
+  const urls:     string[] = []
+  const errors:   string[] = []
+  const timestamp = Date.now()  // single stamp avoids same-millisecond path collisions
   let i = 0
 
   while (formData.has(`file_${i}`)) {
     const file = formData.get(`file_${i}`) as File
     const ext  = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
-    const path = `${propertyId}/${Date.now()}_${i}.${ext}`
+    const path = `${propertyId}/${timestamp}_${i}.${ext}`
 
     const { error: uploadErr } = await admin.storage
       .from('property-images')

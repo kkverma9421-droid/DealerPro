@@ -13,13 +13,7 @@ import Header            from '@/components/layout/Header'
 import FilterBar, { type SortOption, type StatusFilterValue } from '@/components/dashboard/FilterBar'
 import PropertyGrid      from '@/components/dashboard/PropertyGrid'
 import MobileBottomNav   from '@/components/MobileBottomNav'
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function fmtPrice(price: number): string {
-  if (price >= 10_000_000) return `₹${(price / 10_000_000).toFixed(1)} Cr`
-  if (price >= 100_000)    return `₹${(price / 100_000).toFixed(1)} L`
-  return `₹${price.toLocaleString('en-IN')}`
-}
+import { fmtPrice }      from '@/lib/format'
 
 // ─── KPI card ─────────────────────────────────────────────────────────────────
 function KpiCard({
